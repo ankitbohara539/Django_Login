@@ -1,1 +1,47 @@
-<h1>This is signUp page</h1>
+{% extends "loginApp/index.html" %}
+
+
+{% block contents %}
+<div class="container">
+<form method="POST" action="" class="needs-validation" novalidate>
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="username" class="form-label">Username:</label>
+        <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username"
+            required>
+        <div class="invalid-feedback">Please provide a username.</div>
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Password:</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password"
+            required>
+        <div class="invalid-feedback">Please provide a password.</div>
+    </div>
+    <div class="mb-3">
+        <label for="first_name" class="form-label">First Name:</label>
+        <input type="text" id="first_name" name="first_name" class="form-control" placeholder="Enter your first name"
+            required>
+        <div class="invalid-feedback">Please provide your first name.</div>
+    </div>
+    <div class="mb-3">
+        <label for="last_name" class="form-label">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" class="form-control" placeholder="Enter your last name"
+            required>
+        <div class="invalid-feedback">Please provide your last name.</div>
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+        <div class="invalid-feedback">Please provide a valid email address.</div>
+    </div>
+    <button type="submit">Register</button>
+    <p>already have an account ?<a href="../">login</a></p>
+    
+
+</form>
+</div>
+{% for message in messages %}
+<p>{{ message }}</p>
+{% endfor %}
+
+{% endblock %}
