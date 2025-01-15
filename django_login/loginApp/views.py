@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from .models import ProgrammingLanguage
+from .forms import ProgrammingLanguageForm
 
 
 # Create your views here.
@@ -56,3 +58,46 @@ def register(request):
             return redirect('../')
     return render(request, "loginApp/register.html")
 
+# Admin dashboard displaying all programming languages
+
+def admindash(request):
+    languages = ProgrammingLanguage.objects.all()
+    return render(request, 'loginApp/dashbord/admin.html', {'languages': languages})
+
+
+def add(request):
+    if request.method == 'POST':
+        form = ProgrammingLanguageForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('admindash')  
+    else:
+        form = ProgrammingLanguageForm() 
+    
+    return render(request, 'loginApp/dashbord/form.html', {'form': form, 'action': 'Add'})
+
+
+def update(request, pk):
+    language = get_object_or_404(ProgrammingLanguage, pk=pk)
+    if request.method == 'POST':
+        form = ProgrammingLanguageForm(request.POST, request.FILES, instance=language)
+        if form.is_valid():
+            form.save()
+            return redirect('admindash') 
+    else:
+        form = ProgrammingLanguageForm(instance=language) 
+    
+    return render(request, 'loginApp/dashbord/form.html', {'form': form, 'action': 'Edit'})
+
+def delete(request, pk):
+    language = get_object_or_404(ProgrammingLanguage, pk=pk)
+    if request.method == 'POST':
+        language.delete()  
+        return redirect('admindash') 
+    return render(request, 'loginApp/dashbord/delete.html', {'language': language})
+
+
+
+def view_languages(request):
+    languages = ProgrammingLanguage.objects.all()
+    return render(request, 'loginApp/user/languages.html', {'languages': languages})
